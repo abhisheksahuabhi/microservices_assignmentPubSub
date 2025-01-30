@@ -1,0 +1,38 @@
+
+services:
+  mongodb:
+    image: mongo:6
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  receiver-service:
+    build:
+      context: ./publisher
+    ports:
+      - "3000:3000"
+    environment:
+      - AWS_ACCESS_KEY_ID={{key1}}
+      - AWS_SECRET_ACCESS_KEY={{key2}}
+      - AWS_REGION=ap-south-1
+      - SQS_URL={{}}
+      - MONGO_URI=mongodb://mongodb:27017
+    depends_on:
+      - mongodb
+
+  listener-service:
+    build:
+      context: ./subscriber
+    environment:
+      - AWS_ACCESS_KEY_ID={{key1}}
+      - AWS_SECRET_ACCESS_KEY={{key2}}
+      - AWS_REGION=ap-south-1
+      - SQS_URL={{}}
+      - MONGO_URI=mongodb://mongodb:27017
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo-data:
