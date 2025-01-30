@@ -14,11 +14,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - AWS_ACCESS_KEY_ID={{key1}}
-      - AWS_SECRET_ACCESS_KEY={{key2}}
+      - AWS_ACCESS_KEY_ID={{aws_acces_key}}
+      - AWS_SECRET_ACCESS_KEY={{aws_secret_key}}
       - AWS_REGION=ap-south-1
-      - SQS_URL={{}}
+      - SQS_URL=https://sqs.ap-south-1.amazonaws.com/{{number}}/
       - MONGO_URI=mongodb://mongodb:27017
+      - QUEUENAME=testSqsQueue 
+      - DATABASE_NAME=pubSubDB
     depends_on:
       - mongodb
 
@@ -26,11 +28,13 @@ services:
     build:
       context: ./subscriber
     environment:
-      - AWS_ACCESS_KEY_ID={{key1}}
-      - AWS_SECRET_ACCESS_KEY={{key2}}
+      - AWS_ACCESS_KEY_ID={{aws_acces_key}}
+      - AWS_SECRET_ACCESS_KEY={{aws_secret_key}}
       - AWS_REGION=ap-south-1
-      - SQS_URL={{}}
+      - SQS_URL=https://sqs.ap-south-1.amazonaws.com/{{number}}/
       - MONGO_URI=mongodb://mongodb:27017
+      - QUEUENAME=testSqsQueue 
+      - DATABASE_NAME=pubSubDB
     depends_on:
       - mongodb
 
