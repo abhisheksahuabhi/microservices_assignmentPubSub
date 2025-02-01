@@ -11,7 +11,7 @@ AWS.config.update({
 });
 const app = express();
 app.use(express.json());
-// app.use(bodyParser.json());
+
 const client = new MongoClient(process.env.MONGO_URI);
 const sqs = new AWS.SQS({ region: process.env.AWS_REGION });
 
@@ -26,7 +26,6 @@ app.post("/receiver", async (req, res) => {
       return res.status(400).json({ error: "Invalid data send through request" });
     }
     const requestPayload = { _id: uuidv4(), user, class: userClass, age, email, inserted_at: new Date().toISOString() };
-    // console.log("request body::"+requestPayload.id+requestPayload.user)
     const result = await collection.insertOne(requestPayload);
     if (!result.acknowledged) {
       return res.status(500).json({ error: "Insert operation failed" });
